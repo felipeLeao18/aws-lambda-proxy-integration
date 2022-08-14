@@ -1,0 +1,27 @@
+service: aws-lambda-proxy-integration
+app: aws-lambda-proxy-integration
+
+provider:
+  stage: ${opt:stage, 'local'}
+  region: us-east-1
+  name: aws
+  lambdaHashingVersion: 20201221
+  runtime: nodejs14.x
+  timeout: 12
+  iamRoleStatements:
+  - Effect: Allow
+    Action:
+      - "execute-api:ManageConnections"
+      - "execute-api:Invoke"
+    Resource:
+      - "arn:aws:execute-api:*:*:**/@connections/*"
+
+custom:
+    webpack:
+        webpackConfig: ./webpack.config.js
+        includeModules: true
+
+	
+plugins:
+  - serverless-offline
+  - serverless-webpack
